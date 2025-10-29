@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🦇 Портал "Готэм" 6 "Г" Класс (MAX Style)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Orbitron:wght@700&family=Montserrat:wght=400;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- Общие Стили и Переменные --- */
+        :root {
+            --primary-orange: #ff4500; /* Глубокий оранжевый */
+            --primary-purple: #8a2be2; /* Электрический фиолетовый */
+            --dark-bg: #0a0a0a; /* Почти черный, готический фон */
+            --light-text: #e0e0e0;
+            --neon-glow: #ff9800; /* Неоновый оранжевый */
+        }
+
+        /* --- АНИМАЦИИ ФОНА (Неоновые тыквы) --- */
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0.8; }
+            50% { transform: translateY(-25px) translateX(15px) rotate(5deg); opacity: 1; }
+        }
+        .pumpkin-float {
+            position: fixed; width: 60px; height: 60px;
+            background: radial-gradient(circle, var(--primary-orange) 10%, var(--primary-purple) 90%);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            box-shadow: 0 0 30px var(--primary-orange), 0 0 10px var(--primary-purple) inset; /* Неоновое свечение */
+            z-index: -1;
+            animation: float 12s infinite ease-in-out;
+            pointer-events: none;
+            filter: blur(0.5px);
+        }
+        .pumpkin-float:nth-child(1) { left: 10%; top: 15%; animation-delay: 0s; width: 70px; height: 70px; }
+        .pumpkin-float:nth-child(2) { left: 80%; top: 30%; animation-delay: 4s; opacity: 0.6; }
+        .pumpkin-float:nth-child(3) { left: 30%; bottom: 10%; animation-delay: 8s; width: 50px; height: 50px; }
+
+        /* --- ОСНОВНЫЕ ЭЛЕМЕНТЫ --- */
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--light-text);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            min-height: 100vh; margin: 0; padding: 20px 0; overflow-x: hidden;
+        }
+
+        .content-section {
+            display: none; padding: 40px; border-radius: 16px;
+            background: rgba(10, 10, 10, 0.98);
+            /* Усиленный современный готический эффект */
+            box-shadow: 0 0 40px rgba(138, 43, 226, 0.5), 0 0 20px var(--primary-orange); 
+            max-width: 900px; width: 90%; margin: 20px auto; border: 2px solid var(--primary-purple);
+            text-align: center; flex-direction: column; align-items: center; z-index: 10;
+        }
+        #main-page { display: flex; }
+
+        h1 {
+            font-family: 'Creepster', cursive; font-size: 4em; color: var(--primary-orange);
+            text-shadow: 0 0 20px var(--neon-glow), 0 0 10px var(--primary-purple);
+            letter-spacing: 5px; margin-bottom: 20px;
+        }
+        
+        /* --- ЭЛЕМЕНТЫ ФОРМ: ПОЛЯ И КНОПКИ (СОВРЕМЕННЫЙ ДИЗАЙН) --- */
+        input[type="text"], input[type="password"], .schedule-editor textarea {
+            background-color: #1a1a1a;
+            color: var(--light-text);
+            padding: 14px; /* Увеличили padding для современного вида */
+            margin: 10px 0;
+            width: 100%;
+            box-sizing: border-box;
+            border-radius: 6px;
+            border: 1px solid var(--primary-purple); /* Тонкая рамка */
+            font-size: 1em;
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+        }
+        input:focus, textarea:focus {
+            border-color: var(--primary-orange);
+            box-shadow: 0 0 15px rgba(255, 69, 0, 0.6); /* Оранжевое неоновое свечение при фокусе */
+            outline: none;
+        }
+
+        /* Общий стиль для всех интерактивных кнопок */
+        .interactive-btn {
+            padding: 12px 25px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            font-size: 1.1em;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            text-transform: uppercase;
+        }
+        
+        /* Кнопки Главной Сетки */
+        .action-button { 
+            /* Наследует .interactive-btn */
+            height: 100px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            font-size: 1.1em; color: white; border: none;
+        }
+        .action-button:hover { transform: scale(1.05); }
+
+        /* Стилизация кнопок логина, проверки оценок, назад */
+        #login-section button, #grades-page button, .back-button {
+            background-color: var(--primary-purple);
+            color: var(--light-text);
+        }
+        #login-section button:hover, #grades-page button:hover, .back-button:hover {
+            background-color: var(--primary-orange);
+            color: var(--dark-bg);
+            box-shadow: 0 0 20px var(--neon-glow);
+            transform: scale(1.02);
+        }
+        
+        /* --- Стили Технического Перерыва (Для всех, кроме админа) --- */
+        #maintenance-page {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.98); z-index: 1000; justify-content: center;
+            align-items: center; text-align: center; flex-direction: column;
+        }
+        #maintenance-page h1 { color: #f44336; font-size: 5em; text-shadow: 0 0 20px #f44336; }
+        #maintenance-page p { font-size: 1.8em; color: #ff9800; }
+    </style>
+</head>
+<body>
+    
+    <div class="pumpkin-float"></div>
+    <div class="pumpkin-float"></div>
+    <div class="pumpkin-float"></div>
+
+    <section id="maintenance-page">
+        <h1>🛠️ СИСТЕМА ОФФЛАЙН 🛠️</h1>
+        <p>
+            На портале проводятся критические работы.<br>
+            Администратор будет на месте, но для вас вход временно закрыт.
+        </p>
+    </section>
+
+    <section id="main-page" class="content-section">
+        <h1>💀 ПОРТАЛ 6 "Г" КЛАССА 💀</h1>
+        <p style="margin-bottom: 40px; color: #aaa;">Добро пожаловать в нашу Хэллоуин-Обитель!</p>
+        
+        <div class="button-grid">
+            <button onclick="showSection('roulette-page')" class="action-button interactive-btn" style="background-color: #ff5722;">
+                <span class="emoji-icon">🎲</span> Рулетка Удачи
+            </button>
+            <button onclick="showSection('download-page')" class="action-button interactive-btn" style="background-color: #673ab7;">
+                <span class="emoji-icon">📚</span> Скачать Учебники
+            </button>
+            <button onclick="showSection('schedule-page'); loadScheduleDisplay();" class="action-button interactive-btn" style="background-color: #4caf50;">
+                <span class="emoji-icon">🗓️</span> Расписание
+            </button>
+            <button onclick="showSection('grades-page')" class="action-button interactive-btn" style="background-color: #ffc107; color: var(--dark-bg);">
+                <span class="emoji-icon">⭐</span> Посмотреть Оценки [BETA]
+            </button>
+            <button onclick="showSection('admin-page'); loadScheduleEditor(); loadRouletteModeDisplay(); loadMaintenanceModeDisplay();" class="action-button interactive-btn" style="background-color: #333; grid-column: span 3; height: 60px;">
+                <span class="emoji-icon">🔒</span> Админ: Редактировать Портал
+            </button>
+        </div>
+    </section>
+
+    <section id="roulette-page" class="content-section">
+        <button onclick="showSection('main-page')" class="back-button interactive-btn">← На Главную</button>
+        <h1>👻 РУЛЕТКА УДАЧИ 👻</h1>
+        <div id="roulette-result" style="font-family: 'Orbitron', sans-serif; font-size: 8em; margin: 30px 0; padding: 15px; border: 5px solid #ff0000; border-radius: 15px; background-color: #1a0000; color: var(--neon-glow); text-shadow: 0 0 20px var(--neon-glow), 0 0 40px #ff0000;">?</div>
+        <button id="spinButton" class="interactive-btn" style="background-color: var(--primary-orange); color: var(--dark-bg); padding: 15px 30px;">ВРАЩАТЬ</button>
+    </section>
+    
+    <section id="download-page" class="content-section">
+        <button onclick="showSection('main-page')" class="back-button interactive-btn">← На Главную</button>
+        <h1>📚 УЧЕБНЫЕ МАТЕРИАЛЫ</h1>
+        
+        <div style="margin-top: 50px;">
+            <p style="font-size: 2.5em; color: var(--primary-orange); font-family: 'Creepster', cursive; text-shadow: 0 0 10px #ff0000; letter-spacing: 2px;">
+                ВРЕМЕННО НЕДОСТУПНО
+            </p>
+            <p style="font-size: 1.2em; color: #ccc;">
+                Контент находится на реставрации. Пожалуйста, зайдите позже.
+            </p>
+        </div>
+    </section>
+
+    <section id="schedule-page" class="content-section">
+        <button onclick="showSection('main-page')" class="back-button interactive-btn">← На Главную</button>
+        <h1>🗓️ РАСПИСАНИЕ УРОКОВ</h1>
+        <div class="schedule-container">
+            <p id="schedule-message" style="color: #ff9800;">Загрузка расписания...</p>
+            <div id="schedule-display"></div>
+        </div>
+    </section>
+    
+    <section id="grades-page" class="content-section">
+        <button onclick="showSection('main-page')" class="back-button interactive-btn">← На Главную</button>
+        <h1>⭐ ПРОВЕРКА ОЦЕНОК [BETA]</h1>
+        <p style="margin-bottom: 20px; color: #ccc;">Введите свои данные для проверки</p>
+        
+        <div style="width: 100%; max-width: 400px;">
+            <input type="text" id="grades-name" placeholder="Фамилия и Имя" required>
+            <button onclick="checkGrades()" class="interactive-btn">ПРОВЕРИТЬ</button>
+        </div>
+        
+        <p id="grades-status" style="margin-top: 15px;"></p>
+    </section>
+
+    <section id="admin-page" class="content-section">
+        <button onclick="showSection('main-page')" class="back-button interactive-btn">← На Главную</button>
+        <h1>🔒 ПАНЕЛЬ АДМИНИСТРАТОРА</h1>
+
+        <div id="login-section" style="width: 100%; max-width: 400px;">
+            <h2>Вход</h2>
+            <div class="login-form">
+                <input type="password" id="admin-password" placeholder="Введите секретный ключ">
+                <button onclick="login()" class="interactive-btn">Войти</button>
+            </div>
+        </div>
+
+        <div id="editor-section" style="display:none; width: 100%;">
+            <hr style="margin: 40px 0; border-color: var(--primary-orange);">
+            <h2>🛠️ Технический Перерыв</h2>
+            <div id="maintenance-control">
+                <p id="maintenance-mode-status" style="font-size: 1.1em; margin-bottom: 15px;">
+                    Текущий статус: Загрузка...
+                </p>
+                <div class="admin-button-group">
+                    <button onclick="setMaintenanceMode(true)" class="interactive-btn" style="background-color: #f44336;">
+                        🔴 Включить Перерыв
+                    </button>
+                    <button onclick="setMaintenanceMode(false)" class="interactive-btn" style="background-color: #4CAF50;">
+                        🟢 Отключить Перерыв
+                    </button>
+                </div>
+            </div>
+
+            <hr class="admin-section-divider">
+            <h2>Управление Рулеткой</h2>
+            <div id="roulette-control">
+                <p id="roulette-mode-status" style="font-size: 1.1em; margin-bottom: 15px;">
+                    Текущий режим: Загрузка...
+                </p>
+                <div class="admin-button-group">
+                    <button onclick="setRouletteMode('guaranteed')" class="interactive-btn" style="background-color: var(--primary-orange);">
+                        ⚙️ Накрутить на "6"
+                    </button>
+                    <button onclick="setRouletteMode('random')" class="interactive-btn" style="background-color: var(--primary-purple);">
+                        🎲 Случайный режим
+                    </button>
+                </div>
+            </div>
+            
+            <hr class="admin-section-divider">
+            <h2>Редактировать Расписание</h2>
+            <div class="schedule-editor">
+                <label for="mon" style="display: block; text-align: left; margin-top: 10px;">Понедельник:</label><textarea id="mon" placeholder="1. Математика, 2. Русский язык..."></textarea>
+                <label for="tue" style="display: block; text-align: left;">Вторник:</label><textarea id="tue" placeholder="1. Физ-ра, 2. История..."></textarea>
+                <label for="wed" style="display: block; text-align: left;">Среда:</label><textarea id="wed" placeholder="1. Биология, 2. География..."></textarea>
+                <label for="thu" style="display: block; text-align: left;">Четверг:</label><textarea id="thu" placeholder="1. Английский, 2. Музыка..."></textarea>
+                <label for="fri" style="display: block; text-align: left;">Пятница:</label><textarea id="fri" placeholder="1. Информатика, 2. Литература..."></textarea>
+
+                <button onclick="saveSchedule()" class="interactive-btn" style="background-color: var(--primary-orange); color: var(--dark-bg); margin-top: 20px;">Сохранить Расписание</button>
+                <p id="status-message" style="color: var(--primary-orange); margin-top: 15px;"></p>
+            </div>
+        </div>
+    </section>
+    
+    <script>
+        // --- ГЛОБАЛЬНЫЕ КОНСТАНТЫ И ПЕРЕМЕННЫЕ ---
+        const ADMIN_PASSWORD = 'admin6g';
+        const days = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница'];
+        const GUARANTEED_NUMBER = 6;
+        const min = 1;
+        const max = 22;
+
+        // --- 1. СИСТЕМА ПЕРЕКЛЮЧЕНИЯ СЕКЦИЙ И ПРОВЕРКА ПЕРЕРЫВА ---
+        function checkMaintenance() {
+            const isMaintenanceActive = localStorage.getItem('maintenanceMode') === 'true';
+            
+            // Проверяем, находится ли пользователь на странице админа
+            const isOnAdminPage = document.getElementById('admin-page').style.display === 'flex';
+            
+            // Если перерыв активен И пользователь НЕ находится на странице админа (после ввода пароля)
+            if (isMaintenanceActive && !isOnAdminPage) {
+                document.querySelectorAll('.content-section').forEach(section => {
+                    // Скрываем все, кроме тех. страницы, и перенаправляем.
+                    if (section.id !== 'maintenance-page') {
+                        section.style.display = 'none';
+                    }
+                });
+                document.getElementById('maintenance-page').style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+                return true;
+            } else {
+                // Если перерыв выключен или это админ, скрываем страницу перерыва
+                document.getElementById('maintenance-page').style.display = 'none';
+                document.body.style.overflow = 'auto';
+                return false;
+            }
+        }
+        
+        function showSection(sectionId) {
+            // Если перерыв активен, блокируем все, кроме админки.
+            if (checkMaintenance() && sectionId !== 'admin-page') {
+                return;
+            }
+            
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.style.display = 'none';
+            });
+            document.getElementById(sectionId).style.display = 'flex';
+            window.scrollTo(0, 0);
+        }
+
+        // --- 2. ЛОГИКА ТЕХНИЧЕСКОГО ПЕРЕРЫВА ---
+        function setMaintenanceMode(status) {
+            localStorage.setItem('maintenanceMode', status);
+            loadMaintenanceModeDisplay();
+            checkMaintenance(); // Немедленно активируем блокировку
+            
+            const statusMessage = document.getElementById('status-message');
+            const displayStatus = status ? 'ВКЛЮЧЕН' : 'ОТКЛЮЧЕН';
+            statusMessage.textContent = `✅ Технический Перерыв: ${displayStatus}.`;
+            setTimeout(() => { statusMessage.textContent = ''; }, 3000);
+        }
+
+        function loadMaintenanceModeDisplay() {
+            const isMaintenanceActive = localStorage.getItem('maintenanceMode') === 'true';
+            const statusElement = document.getElementById('maintenance-mode-status');
+            
+            if (isMaintenanceActive) {
+                statusElement.textContent = 'Текущий статус: 🔴 ВКЛЮЧЕН';
+                statusElement.style.color = '#f44336';
+            } else {
+                statusElement.textContent = 'Текущий статус: 🟢 ОТКЛЮЧЕН';
+                statusElement.style.color = '#4CAF50';
+            }
+        }
+
+
+        // --- 3. ЛОГИКА РУЛЕТКИ (Осталась без изменений) ---
+        const resultDisplay = document.getElementById('roulette-result');
+        const spinButton = document.getElementById('spinButton');
+
+        function getRandomInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+
+        function spinRoulette() {
+            if (checkMaintenance()) return; // Блокировка
+            spinButton.disabled = true;
+            resultDisplay.classList.add('spinning');
+            
+            let spinIterations = 0;
+            const maxSpinIterations = 30;
+            const spinIntervalTime = 70;
+            const currentMode = localStorage.getItem('rouletteMode') || 'random';
+
+            const spinInterval = setInterval(() => {
+                resultDisplay.textContent = getRandomInt(min, max);
+                spinIterations++;
+
+                if (spinIterations >= maxSpinIterations) {
+                    clearInterval(spinInterval);
+                    let finalResult = (currentMode === 'guaranteed') ? GUARANTEED_NUMBER : getRandomInt(min, max);
+                    resultDisplay.textContent = finalResult;
+                    resultDisplay.classList.remove('spinning');
+                    spinButton.disabled = false;
+                    resultDisplay.classList.add('number-scroll-animation');
+                    setTimeout(() => { resultDisplay.classList.remove('number-scroll-animation'); }, 200);
+                }
+            }, spinIntervalTime);
+        }
+
+        spinButton.addEventListener('click', spinRoulette);
+
+
+        // --- 4. ЛОГИКА АДМИНКИ ---
+        function login() {
+            const enteredPassword = document.getElementById('admin-password').value;
+            if (enteredPassword === ADMIN_PASSWORD) {
+                document.getElementById('login-section').style.display = 'none';
+                document.getElementById('editor-section').style.display = 'flex';
+                document.getElementById('editor-section').style.flexDirection = 'column';
+                loadScheduleEditor();
+                loadRouletteModeDisplay();
+                loadMaintenanceModeDisplay();
+                // После успешного логина, перезапускаем проверку, чтобы админка осталась открытой
+                checkMaintenance(); 
+            } else {
+                alert('❌ Неверный секретный ключ!');
+                document.getElementById('admin-password').value = '';
+            }
+        }
+        
+        function setRouletteMode(mode) {
+            localStorage.setItem('rouletteMode', mode);
+            loadRouletteModeDisplay();
+            const status = document.getElementById('status-message');
+            const displayMode = mode === 'guaranteed' ? 'ГАРАНТИРОВАНО "6"' : 'СЛУЧАЙНЫЙ';
+            status.textContent = `✅ Режим рулетки установлен на "${displayMode}".`;
+            setTimeout(() => { status.textContent = ''; }, 3000);
+        }
+        function loadRouletteModeDisplay() {
+            const currentMode = localStorage.getItem('rouletteMode') || 'random';
+            const statusElement = document.getElementById('roulette-mode-status');
+            const displayMode = currentMode === 'guaranteed' ? 'ГАРАНТИРОВАНО "6"' : 'СЛУЧАЙНЫЙ';
+            statusElement.textContent = `Текущий режим: ${displayMode}`;
+            statusElement.style.color = currentMode === 'guaranteed' ? 'var(--primary-orange)' : '#4caf50';
+        }
+
+        function loadScheduleEditor() {
+            const storedSchedule = localStorage.getItem('classSchedule');
+            if (storedSchedule) {
+                const data = JSON.parse(storedSchedule);
+                document.getElementById('mon').value = data['Понедельник'] || '';
+                document.getElementById('tue').value = data['Вторник'] || '';
+                document.getElementById('wed').value = data['Среда'] || '';
+                document.getElementById('thu').value = data['Четверг'] || '';
+                document.getElementById('fri').value = data['Пятница'] || '';
+            }
+        }
+        
+        function saveSchedule() {
+            const scheduleData = {
+                'Понедельник': document.getElementById('mon').value.trim(),
+                'Вторник': document.getElementById('tue').value.trim(),
+                'Среда': document.getElementById('wed').value.trim(),
+                'Четверг': document.getElementById('thu').value.trim(),
+                'Пятница': document.getElementById('fri').value.trim()
+            };
+            localStorage.setItem('classSchedule', JSON.stringify(scheduleData));
+            const status = document.getElementById('status-message');
+            status.textContent = '✅ Расписание успешно сохранено!';
+            setTimeout(() => { status.textContent = ''; }, 3000);
+        }
+
+        // --- 5. ОТОБРАЖЕНИЕ РАСПИСАНИЯ и ОЦЕНКИ ---
+        function loadScheduleDisplay() {
+            if (checkMaintenance()) return;
+            const scheduleDisplay = document.getElementById('schedule-display');
+            const message = document.getElementById('schedule-message');
+            const storedSchedule = localStorage.getItem('classSchedule');
+            scheduleDisplay.innerHTML = '';
+            message.textContent = '';
+            if (storedSchedule) {
+                const scheduleData = JSON.parse(storedSchedule);
+                days.forEach(day => {
+                    const dayData = scheduleData[day] || '';
+                    const dayDiv = document.createElement('div');
+                    let html = `<h3>${day}</h3>`;
+                    if (dayData.trim() !== '') {
+                        html += `<p>${dayData}</p>`; 
+                    } else {
+                        html += `<p style="color: #aaa;">Уроки пока не добавлены.</p>`;
+                    }
+                    dayDiv.innerHTML = html;
+                    scheduleDisplay.appendChild(dayDiv);
+                });
+            } else {
+                message.textContent = '❌ Расписание еще не заполнено администратором.';
+            }
+        }
+        
+        function checkGrades() {
+            if (checkMaintenance()) return; // Блокировка
+            const name = document.getElementById('grades-name').value.trim();
+            const status = document.getElementById('grades-status');
+            status.style.color = '#ff9800';
+
+            if (name === '') {
+                status.textContent = 'Пожалуйста, введите свою Фамилию и Имя.';
+                return;
+            }
+            status.textContent = 'Подключение к серверу оценок... (Идет загрузка 10 секунд)';
+            
+            setTimeout(() => {
+                status.textContent = `⚠️ НЕИЗВЕСТНАЯ ОШИБКА. ПОВТОРИТЕ ПОЗЖЕ. (Пользователь: ${name})`;
+                status.style.color = '#ff0000';
+            }, 10000);
+        }
+
+
+        // Инициализация при загрузке
+        document.addEventListener('DOMContentLoaded', () => {
+             // Сначала проверяем тех. перерыв, потом показываем что нужно
+             if (!checkMaintenance()) {
+                 document.getElementById('main-page').style.display = 'flex';
+             }
+        });
+        
+    </script>
+</body>
+</html>
